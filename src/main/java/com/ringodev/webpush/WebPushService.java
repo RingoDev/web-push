@@ -4,11 +4,16 @@ package com.ringodev.webpush;
 
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.jose4j.lang.JoseException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -21,7 +26,7 @@ public class WebPushService {
     public void sendPushMessage(Subscription sub, byte[] payload) throws GeneralSecurityException, InterruptedException, JoseException, ExecutionException, IOException {
 
         // Figure out if we should use GCM for this notification somehow
-        boolean useGcm = true;
+        boolean useGcm = false;
         Notification notification;
         PushService pushService;
 
@@ -35,7 +40,8 @@ public class WebPushService {
             );
 
             // Instantiate the push service, no need to use an API key for Push API
-            pushService = new PushService();
+            pushService = new PushService().setKeyPair(getKeys());
+
         } else {
             // Or create a GcmNotification, in case of Google Cloud Messaging
             notification = new Notification(
@@ -52,5 +58,16 @@ public class WebPushService {
 
         // Send the notification
         pushService.send(notification);
+    }
+
+    private KeyPair getKeys() throws IOException {
+
+        try (InputStreamReader inputStreamReader = new InputStreamReader(getClass().getResourceAsStream("/home/vapid/vapid_private.pem"))) {
+            PEMParser pemParser = new PEMParser(inputStreamReader);
+            PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
+            return new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
+        } catch (IOException e) {
+            throw new IOException("The private key could not be decrypted", e);
+        }
     }
 }

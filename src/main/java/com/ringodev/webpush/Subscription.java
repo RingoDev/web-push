@@ -29,10 +29,8 @@ class Subscription {
     }
 
     @Id
-    long id;
-
-    String auth;
     String key;
+    String auth;
     String endpoint;
 
     public void setAuth(String auth) {
