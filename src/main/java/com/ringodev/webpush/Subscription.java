@@ -64,6 +64,8 @@ class Subscription {
         return Base64.getDecoder().decode(getAuth());
     }
 
+
+
     /**
      * Returns the base64 encoded public key string as a byte[]
      */
@@ -81,5 +83,13 @@ class Subscription {
         ECPublicKeySpec pubSpec = new ECPublicKeySpec(point, ecSpec);
 
         return kf.generatePublic(pubSpec);
+    }
+    @Override
+    public String toString() {
+        return "Subscription{" +
+                "key='" + key + '\'' +
+                ", auth='" + auth + '\'' +
+                ", endpoint='" + endpoint + '\'' +
+                '}';
     }
 }
