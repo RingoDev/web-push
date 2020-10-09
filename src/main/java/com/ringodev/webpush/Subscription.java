@@ -7,10 +7,7 @@ import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -34,8 +31,12 @@ class Subscription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
+    @Column(name = "sub_key")
     String key;
+
+    @Column(name = "sub_auth")
     String auth;
+
     String endpoint;
 
     public void setAuth(String auth) {
