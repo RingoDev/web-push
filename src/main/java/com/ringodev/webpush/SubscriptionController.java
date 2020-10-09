@@ -17,15 +17,19 @@ public class SubscriptionController {
     private final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
     @Autowired
-    SubscriptionController(SubscriptionRepository repository){
+    SubscriptionController(SubscriptionRepository repository) {
         this.repository = repository;
     }
-    @CrossOrigin(origins="https://www.ringodev.com")
+
+    @CrossOrigin(origins = "https://www.ringodev.com")
     @PostMapping("/add")
-    public ResponseEntity<Object> addSubscription(@RequestBody Subscription subscription, HttpServletRequest request){
+    public ResponseEntity<Object> addSubscription(@RequestBody Subscription subscription, HttpServletRequest request) {
         logger.info("Tried to add Subscription");
         logger.info(subscription.toString());
-        repository.save(subscription);
+        if (repository.findAll().stream().noneMatch((sub) -> sub.endpoint == subscription.endpoint))
+            repository.save(subscription);
+        else
+            logger.info("Endpoint existed already");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
