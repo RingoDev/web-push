@@ -10,8 +10,7 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.jose4j.lang.JoseException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.concurrent.ExecutionException;
@@ -62,7 +61,7 @@ public class WebPushService {
 
     private KeyPair getKeys() throws IOException {
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(getClass().getResourceAsStream("/home/vapid/vapid_private.pem"))) {
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new DataInputStream(new FileInputStream(new File("/home/vapid/vapid_private.pem"))))) {
             PEMParser pemParser = new PEMParser(inputStreamReader);
             PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
             return new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
