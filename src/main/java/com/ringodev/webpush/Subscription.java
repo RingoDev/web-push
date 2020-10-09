@@ -8,6 +8,8 @@ import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -29,6 +31,9 @@ class Subscription {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long id;
+
     String key;
     String auth;
     String endpoint;
@@ -65,7 +70,6 @@ class Subscription {
     }
 
 
-
     /**
      * Returns the base64 encoded public key string as a byte[]
      */
@@ -84,6 +88,7 @@ class Subscription {
 
         return kf.generatePublic(pubSpec);
     }
+
     @Override
     public String toString() {
         return "Subscription{" +
