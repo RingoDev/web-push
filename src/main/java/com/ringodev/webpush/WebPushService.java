@@ -8,6 +8,8 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.jose4j.lang.JoseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -22,7 +24,10 @@ public class WebPushService {
     /** The Time to live of GCM notifications */
     private static final int TTL = 255;
 
+    private final Logger logger = LoggerFactory.getLogger(WebPushService.class);
+
     public void sendPushMessage(Subscription sub, byte[] payload) throws GeneralSecurityException, InterruptedException, JoseException, ExecutionException, IOException {
+
 
         // Figure out if we should use GCM for this notification somehow
         boolean useGcm = false;
@@ -56,6 +61,8 @@ public class WebPushService {
         }
 
         // Send the notification
+        logger.info("Sending Notification");
+        logger.info(notification.toString());
         pushService.send(notification);
     }
 
