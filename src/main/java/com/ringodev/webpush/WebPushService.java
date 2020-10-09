@@ -53,8 +53,6 @@ public class WebPushService {
         // Send the notification
         logger.info("Sending Notification to");
         logger.info(notification.getEndpoint());
-        logger.info(notification.getUserPublicKey().toString());
-        logger.info(Arrays.toString(notification.getPayload()));
         return pushService.send(notification);
     }
 
@@ -70,7 +68,6 @@ public class WebPushService {
         if (scanner.hasNextLine()) {
             pubKey = (scanner.nextLine());
         }
-        logger.info("Public Key: " + pubKey);
 
         pushService.setPublicKey(Utils.loadPublicKey(pubKey));
         pushService.setPrivateKey(Utils.loadPrivateKey(privKey));

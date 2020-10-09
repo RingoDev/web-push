@@ -35,7 +35,8 @@ private final WebPushService service;
         logger.info(request.toString());
         repository.findAll().forEach((sub) -> {
             try {
-                service.sendPushMessage(sub,new byte[0]);
+                HttpResponse response = service.sendPushMessage(sub,"{\"data\":\"RIngoDev was updated\"}".getBytes(StandardCharsets.UTF_8));
+                logger.info(response.getStatusLine().toString());
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
             }
@@ -47,8 +48,7 @@ private final WebPushService service;
     public ResponseEntity<Object> testHook(HttpServletRequest request) {
         repository.findAll().forEach((sub) -> {
             try {
-                HttpResponse response = service.sendPushMessage(sub,"{\"data\":\"Test succesfull\"}".getBytes(StandardCharsets.UTF_8));
-                logger.info(response.toString());
+                HttpResponse response = service.sendPushMessage(sub,"{\"data\":\"Test successful\"}".getBytes(StandardCharsets.UTF_8));
                 logger.info(response.getStatusLine().toString());
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
