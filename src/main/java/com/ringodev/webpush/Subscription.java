@@ -28,11 +28,14 @@ class Subscription {
     long id;
 
     @JsonProperty("key")
+    @Column(nullable = false)
     String sub_key;
 
     @JsonProperty("auth")
+    @Column(nullable = false)
     String sub_auth;
 
+    @Column(nullable = false)
     String endpoint;
 
     public void setSub_auth(String auth) {
