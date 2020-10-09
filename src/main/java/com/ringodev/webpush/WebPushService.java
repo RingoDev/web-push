@@ -4,9 +4,7 @@ package com.ringodev.webpush;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import nl.martijndwars.webpush.Utils;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.apache.http.HttpResponse;
 import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -34,7 +30,7 @@ public class WebPushService {
 
     private final Logger logger = LoggerFactory.getLogger(WebPushService.class);
 
-    public void sendPushMessage(Subscription sub, byte[] payload) throws GeneralSecurityException, InterruptedException, JoseException, ExecutionException, IOException {
+    public HttpResponse sendPushMessage(Subscription sub, byte[] payload) throws GeneralSecurityException, InterruptedException, JoseException, ExecutionException, IOException {
 
 
         // Figure out if we should use GCM for this notification somehow
@@ -59,7 +55,7 @@ public class WebPushService {
         logger.info(notification.getEndpoint());
         logger.info(notification.getUserPublicKey().toString());
         logger.info(Arrays.toString(notification.getPayload()));
-        pushService.send(notification);
+        return pushService.send(notification);
     }
 
     private void addKeys(PushService pushService) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {

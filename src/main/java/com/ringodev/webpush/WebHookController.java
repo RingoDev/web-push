@@ -1,5 +1,6 @@
 package com.ringodev.webpush;
 
+import org.apache.http.HttpResponse;
 import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,9 @@ private final WebPushService service;
     public ResponseEntity<Object> testHook(HttpServletRequest request) {
         repository.findAll().forEach((sub) -> {
             try {
-                service.sendPushMessage(sub,new byte[0]);
+                HttpResponse response = service.sendPushMessage(sub,new byte[0]);
+                logger.info(response.toString());
+                logger.info(response.getStatusLine().toString());
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
             }
