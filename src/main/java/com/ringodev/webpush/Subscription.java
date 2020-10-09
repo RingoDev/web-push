@@ -1,6 +1,7 @@
 package com.ringodev.webpush;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -18,8 +19,8 @@ import java.util.Base64;
 @Entity
 class Subscription {
     public Subscription(String auth, String key, String endpoint) {
-        this.auth = auth;
-        this.key = key;
+        this.sub_auth = auth;
+        this.sub_key = key;
         this.endpoint = endpoint;
     }
 
@@ -31,20 +32,20 @@ class Subscription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
-    @Column(name = "sub_key")
-    String key;
+    @JsonProperty("key")
+    String sub_key;
 
-    @Column(name = "sub_auth")
-    String auth;
+    @JsonProperty("auth")
+    String sub_auth;
 
     String endpoint;
 
-    public void setAuth(String auth) {
-        this.auth = auth;
+    public void setSub_auth(String auth) {
+        this.sub_auth = auth;
     }
 
-    public String getAuth() {
-        return auth;
+    public String getSub_auth() {
+        return sub_auth;
     }
 
     public void setEndpoint(String endpoint) {
@@ -55,19 +56,19 @@ class Subscription {
         return endpoint;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setSub_key(String key) {
+        this.sub_key = key;
     }
 
-    public String getKey() {
-        return key;
+    public String getSub_key() {
+        return sub_key;
     }
 
     /**
      * Returns the base64 encoded auth string as a byte[]
      */
     public byte[] getAuthAsBytes() {
-        return Base64.getDecoder().decode(getAuth());
+        return Base64.getDecoder().decode(getSub_auth());
     }
 
 
@@ -75,7 +76,7 @@ class Subscription {
      * Returns the base64 encoded public key string as a byte[]
      */
     public byte[] getKeyAsBytes() {
-        return Base64.getDecoder().decode(getKey());
+        return Base64.getDecoder().decode(getSub_key());
     }
 
     /**
@@ -93,8 +94,8 @@ class Subscription {
     @Override
     public String toString() {
         return "Subscription{" +
-                "key='" + key + '\'' +
-                ", auth='" + auth + '\'' +
+                "key='" + sub_key + '\'' +
+                ", auth='" + sub_auth + '\'' +
                 ", endpoint='" + endpoint + '\'' +
                 '}';
     }
