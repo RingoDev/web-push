@@ -3,6 +3,7 @@ package com.ringodev.webpush;
 
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
+import nl.martijndwars.webpush.Utils;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -14,7 +15,12 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -44,7 +50,8 @@ public class WebPushService {
         );
 
         // Instantiate the push service, no need to use an API key for Push API
-        pushService = new PushService().setKeyPair(getKeys());
+        pushService = new PushService();
+        addKeys(pushService);
 
 
         // Send the notification
@@ -55,14 +62,22 @@ public class WebPushService {
         pushService.send(notification);
     }
 
-    private KeyPair getKeys() throws IOException {
+    private void addKeys(PushService pushService) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new DataInputStream(new FileInputStream(new File("/home/vapid/vapid_private.pem"))))) {
-            PEMParser pemParser = new PEMParser(inputStreamReader);
-            PEMKeyPair pemKeyPair = (PEMKeyPair) pemParser.readObject();
-            return new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
-        } catch (IOException e) {
-            throw new IOException("The private key could not be decrypted", e);
+        Scanner scanner = new Scanner(new File("/home/vapid/keys.txt"));
+        String pubKey = null;
+        String privKey = null;
+
+        if (scanner.hasNextLine()) {
+            privKey = (scanner.nextLine());
         }
+        if (scanner.hasNextLine()) {
+            pubKey = (scanner.nextLine());
+        }
+        logger.info("Public Key: " + pubKey);
+
+        pushService.setPublicKey(Utils.loadPublicKey(pubKey));
+        pushService.setPrivateKey(Utils.loadPrivateKey(privKey));
+
     }
 }
