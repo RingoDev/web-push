@@ -21,7 +21,7 @@ public class WebHookController {
 
     private final Logger logger = LoggerFactory.getLogger(WebHookController.class);
 
-private final WebPushService service;
+    private final WebPushService service;
     private final SubscriptionRepository repository;
 
     @Autowired
@@ -35,7 +35,7 @@ private final WebPushService service;
         logger.info(request.toString());
         repository.findAll().forEach((sub) -> {
             try {
-                HttpResponse response = service.sendPushMessage(sub,"{\"data\":\"RIngoDev was updated\"}".getBytes(StandardCharsets.UTF_8));
+                HttpResponse response = service.sendPushMessage(sub, "{\"data\":\"RIngoDev was updated\"}".getBytes(StandardCharsets.UTF_8));
                 logger.info(response.getStatusLine().toString());
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
@@ -48,8 +48,8 @@ private final WebPushService service;
     public ResponseEntity<Object> testHook(HttpServletRequest request) {
         repository.findAll().forEach((sub) -> {
             try {
-                HttpResponse response = service.sendPushMessage(sub,"{\"data\":\"Test successful\"}".getBytes(StandardCharsets.UTF_8));
-                logger.info(response.getStatusLine().toString());
+                HttpResponse response = service.sendPushMessage(sub, "{\"data\":\"Test successful\"}".getBytes(StandardCharsets.UTF_8));
+                logger.info("Statuscode: " + String.valueOf(response.getStatusLine().getStatusCode()));
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
             }

@@ -22,12 +22,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class WebPushService {
 
-
-    /**
-     * The Time to live of GCM notifications
-     */
-    private static final int TTL = 255;
-
     private final Logger logger = LoggerFactory.getLogger(WebPushService.class);
 
     public HttpResponse sendPushMessage(Subscription sub, byte[] payload) throws GeneralSecurityException, InterruptedException, JoseException, ExecutionException, IOException {

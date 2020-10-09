@@ -26,7 +26,7 @@ public class SubscriptionController {
     public ResponseEntity<Object> addSubscription(@RequestBody Subscription subscription, HttpServletRequest request) {
         logger.info("Tried to add Subscription");
         logger.info(subscription.toString());
-        if (repository.findAll().stream().noneMatch((sub) -> sub.endpoint == subscription.endpoint))
+        if (repository.findAll().stream().noneMatch((sub) -> sub.endpoint.equals(subscription.endpoint)))
             repository.save(subscription);
         else
             logger.info("Endpoint existed already");
