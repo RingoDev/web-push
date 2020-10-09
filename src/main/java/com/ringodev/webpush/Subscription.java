@@ -9,23 +9,18 @@ import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 
 import javax.persistence.*;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 @Entity
 class Subscription {
-    public Subscription(String auth, String key, String endpoint) {
-        this.sub_auth = auth;
-        this.sub_key = key;
-        this.endpoint = endpoint;
-    }
 
     public Subscription() {
-
+        // Add BouncyCastle as an algorithm provider
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
     }
 
     @Id

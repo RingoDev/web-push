@@ -40,4 +40,16 @@ private final WebPushService service;
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<Object> testHook(HttpServletRequest request) {
+        repository.findAll().forEach((sub) -> {
+            try {
+                service.sendPushMessage(sub,new byte[0]);
+            } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
+                logger.warn(e.toString());
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
