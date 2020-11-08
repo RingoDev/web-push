@@ -46,6 +46,7 @@ public class WebHookController {
 
     @PostMapping("/test")
     public ResponseEntity<Object> testHook(HttpServletRequest request) {
+        logger.info("Testing");
         repository.findAll().forEach((sub) -> {
             try {
                 HttpResponse response = service.sendPushMessage(sub, "{\"data\":\"Test successful\"}".getBytes(StandardCharsets.UTF_8));
