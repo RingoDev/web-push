@@ -49,7 +49,7 @@ public class WebHookController {
         repository.findAll().forEach((sub) -> {
             try {
                 HttpResponse response = service.sendPushMessage(sub, "{\"data\":\"Test successful\"}".getBytes(StandardCharsets.UTF_8));
-                logger.info("Statuscode: " + String.valueOf(response.getStatusLine().getStatusCode()));
+                logger.info("Statuscode: " + response.getStatusLine().getStatusCode());
             } catch (GeneralSecurityException | ExecutionException | IOException | JoseException | InterruptedException e) {
                 logger.warn(e.toString());
             }
